@@ -126,6 +126,17 @@ You're improving. Error rate down 37% in 3 weeks.
 
 Same format. Project config overrides global.
 
+### AWS Bedrock
+
+If Claude Code itself is running on Bedrock (`CLAUDE_CODE_USE_BEDROCK=1`), the
+hook automatically routes its own Haiku calls through Bedrock using your AWS
+credentials — no separate `ANTHROPIC_API_KEY` needed. Region comes from
+`AWS_REGION` / `AWS_DEFAULT_REGION`; credentials from the usual AWS CLI chain
+(profile, SSO, instance role, etc.). Requires the `aws` CLI on `PATH`.
+
+Override the Bedrock model ID with `CLAUDE_ENGLISH_BUDDY_BEDROCK_MODEL`
+(default: `us.anthropic.claude-haiku-4-5-20251001-v1:0`).
+
 ### Strictness Levels
 
 | Level | Behavior |

@@ -3,6 +3,8 @@
 // Also injects summary_language instruction when configured.
 
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 
@@ -17,7 +19,16 @@ function emit(obj) {
   process.stdout.write(JSON.stringify(obj) + "\n");
 }
 
+// Route to Bedrock when Claude Code itself is running on Bedrock
+// (CLAUDE_CODE_USE_BEDROCK=1). Otherwise use the Anthropic API.
 function callHaiku(systemPrompt, userText) {
+  if (process.env.CLAUDE_CODE_USE_BEDROCK === "1") {
+    return callHaikuBedrock(systemPrompt, userText);
+  }
+  return callHaikuAnthropic(systemPrompt, userText);
+}
+
+function callHaikuAnthropic(systemPrompt, userText) {
   // Use session OAuth token as API key — works for both subscription and API key users.
   // Note: claude CLI deadlocks when spawned inside hooks, so we call the API directly via curl.
   const apiKey = process.env.CLAUDE_CODE_OAUTH_TOKEN || process.env.ANTHROPIC_API_KEY || "";
@@ -49,6 +60,55 @@ function callHaiku(systemPrompt, userText) {
     return text.trim() || null;
   } catch {
     return null;
+  }
+}
+
+// AWS Bedrock path — used when CLAUDE_CODE_USE_BEDROCK=1.
+// Shells out to `aws bedrock-runtime invoke-model`, which picks up
+// AWS_PROFILE/AWS_REGION/credentials from the environment. Requires the aws
+// CLI on PATH (already a prerequisite for running Claude Code on Bedrock).
+function callHaikuBedrock(systemPrompt, userText) {
+  const region  = process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION || "us-east-1";
+  const modelId = process.env.CLAUDE_ENGLISH_BUDDY_BEDROCK_MODEL
+               || "us.anthropic.claude-haiku-4-5-20251001-v1:0";
+
+  // The Bedrock body differs from the Anthropic API: use anthropic_version
+  // (not an HTTP header) and omit the top-level model field.
+  const body = JSON.stringify({
+    anthropic_version: "bedrock-2023-05-31",
+    max_tokens: 1024,
+    system: systemPrompt,
+    messages: [{ role: "user", content: userText }],
+  });
+
+  const suffix  = `ceb-${process.pid}-${Date.now()}`;
+  const inFile  = path.join(os.tmpdir(), `${suffix}-in.json`);
+  const outFile = path.join(os.tmpdir(), `${suffix}-out.json`);
+
+  try {
+    fs.writeFileSync(inFile, body, "utf8");
+
+    const result = spawnSync("aws", [
+      "bedrock-runtime", "invoke-model",
+      "--model-id", modelId,
+      "--region", region,
+      "--body", `fileb://${inFile}`,
+      "--content-type", "application/json",
+      "--accept", "application/json",
+      outFile,
+    ], { encoding: "utf8", timeout: 35_000 });
+
+    if (result.error || result.status !== 0) return null;
+
+    const response = JSON.parse(fs.readFileSync(outFile, "utf8"));
+    if (response.error) return null;
+    const text = response.content?.[0]?.text || "";
+    return text.trim() || null;
+  } catch {
+    return null;
+  } finally {
+    try { fs.unlinkSync(inFile); } catch {}
+    try { fs.unlinkSync(outFile); } catch {}
   }
 }
 
