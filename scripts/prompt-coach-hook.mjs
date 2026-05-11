@@ -15,8 +15,51 @@ function readStdin() {
   return JSON.parse(fs.readFileSync(0, "utf8").trim() || "{}");
 }
 
+// Pending user-visible warning (auth failure). Drained on next emit().
+let authWarning = null;
+
 function emit(obj) {
+  if (authWarning) {
+    obj = { ...obj, systemMessage: obj.systemMessage ? `${authWarning}\n${obj.systemMessage}` : authWarning };
+    authWarning = null;
+  }
   process.stdout.write(JSON.stringify(obj) + "\n");
+}
+
+// Used by main() in fallback branches that would otherwise return silently.
+// Ensures auth warnings still surface even when there's no summary context.
+function emitFallback(summaryCtx) {
+  if (summaryCtx || authWarning) {
+    emit(summaryCtx ? { additionalContext: summaryCtx } : {});
+  }
+}
+
+// Resolve API credentials with macOS keychain fallback.
+// Order: CLAUDE_CODE_OAUTH_TOKEN → ANTHROPIC_API_KEY → macOS keychain.
+// Returns { token, expired } or null.
+function getCredentials() {
+  const envOauth = process.env.CLAUDE_CODE_OAUTH_TOKEN;
+  if (envOauth) return { token: envOauth, expired: false };
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (apiKey) return { token: apiKey, expired: false };
+
+  if (process.platform !== "darwin") return null;
+
+  const result = spawnSync("security", [
+    "find-generic-password", "-s", "Claude Code-credentials", "-w",
+  ], { encoding: "utf8", timeout: 5_000 });
+  if (result.error || result.status !== 0) return null;
+
+  try {
+    const creds = JSON.parse(result.stdout.trim());
+    const token = creds?.claudeAiOauth?.accessToken;
+    const expiresAt = creds?.claudeAiOauth?.expiresAt;
+    if (!token) return null;
+    return { token, expired: Boolean(expiresAt && Date.now() > expiresAt) };
+  } catch {
+    return null;
+  }
 }
 
 // Route to Bedrock when Claude Code itself is running on Bedrock
@@ -29,10 +72,19 @@ function callHaiku(systemPrompt, userText) {
 }
 
 function callHaikuAnthropic(systemPrompt, userText) {
-  // Use session OAuth token as API key — works for both subscription and API key users.
   // Note: claude CLI deadlocks when spawned inside hooks, so we call the API directly via curl.
-  const apiKey = process.env.CLAUDE_CODE_OAUTH_TOKEN || process.env.ANTHROPIC_API_KEY || "";
-  if (!apiKey) return null;
+  const creds = getCredentials();
+  if (!creds) return null;
+
+  if (creds.expired) {
+    authWarning = "[claude-english-buddy] OAuth token expired. Restart Claude Code to refresh the keychain.";
+    return null;
+  }
+
+  // OAuth tokens (sk-ant-oat...) require Authorization: Bearer; API keys use x-api-key.
+  const authHeader = creds.token.startsWith("sk-ant-oat")
+    ? `Authorization: Bearer ${creds.token}`
+    : `x-api-key: ${creds.token}`;
 
   const body = JSON.stringify({
     model: "claude-haiku-4-5-20251001",
@@ -46,7 +98,7 @@ function callHaikuAnthropic(systemPrompt, userText) {
     "-s", "--max-time", "30",
     "https://api.anthropic.com/v1/messages",
     "-H", "content-type: application/json",
-    "-H", `x-api-key: ${apiKey}`,
+    "-H", authHeader,
     "-H", "anthropic-version: 2023-06-01",
     "-d", body,
   ], { encoding: "utf8", timeout: 35_000 });
@@ -55,7 +107,12 @@ function callHaikuAnthropic(systemPrompt, userText) {
 
   try {
     const response = JSON.parse(result.stdout);
-    if (response.error) return null;
+    if (response.error) {
+      if (response.error.type === "authentication_error") {
+        authWarning = "[claude-english-buddy] Authentication failed. If you authenticate via `claude setup-token`, restart Claude Code to refresh the OAuth token.";
+      }
+      return null;
+    }
     const text = response.content?.[0]?.text || "";
     return text.trim() || null;
   } catch {
@@ -195,7 +252,7 @@ function main() {
   if (detection.mode === "translate") {
     const result = callHaiku(SYSTEM_TRANSLATE, detection.text);
     if (!result) {
-      if (summaryCtx) emit({ additionalContext: summaryCtx });
+      emitFallback(summaryCtx);
       return;
     }
 
@@ -220,7 +277,7 @@ function main() {
 
   const result = callHaiku(system, detection.text);
   if (!result) {
-    if (summaryCtx) emit({ additionalContext: summaryCtx });
+    emitFallback(summaryCtx);
     return;
   }
 
