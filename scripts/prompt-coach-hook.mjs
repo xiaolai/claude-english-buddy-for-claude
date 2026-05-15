@@ -34,8 +34,12 @@ function emitFallback(summaryCtx) {
   }
 }
 
-// Resolve API credentials with macOS keychain fallback.
-// Order: CLAUDE_CODE_OAUTH_TOKEN → ANTHROPIC_API_KEY → macOS keychain.
+// Resolve API credentials. On macOS we read from the keychain; on Linux and
+// other non-darwin platforms Claude Code stores OAuth credentials in a
+// plaintext JSON file at ~/.claude/.credentials.json with the same shape
+// the keychain entry uses.
+// Order: CLAUDE_CODE_OAUTH_TOKEN → ANTHROPIC_API_KEY → macOS keychain
+//        → ~/.claude/.credentials.json.
 // Returns { token, expired } or null.
 function getCredentials() {
   const envOauth = process.env.CLAUDE_CODE_OAUTH_TOKEN;
@@ -44,15 +48,28 @@ function getCredentials() {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (apiKey) return { token: apiKey, expired: false };
 
-  if (process.platform !== "darwin") return null;
+  if (process.platform === "darwin") {
+    const result = spawnSync("security", [
+      "find-generic-password", "-s", "Claude Code-credentials", "-w",
+    ], { encoding: "utf8", timeout: 5_000 });
+    if (result.error || result.status !== 0) return null;
 
-  const result = spawnSync("security", [
-    "find-generic-password", "-s", "Claude Code-credentials", "-w",
-  ], { encoding: "utf8", timeout: 5_000 });
-  if (result.error || result.status !== 0) return null;
+    try {
+      const creds = JSON.parse(result.stdout.trim());
+      const token = creds?.claudeAiOauth?.accessToken;
+      const expiresAt = creds?.claudeAiOauth?.expiresAt;
+      if (!token) return null;
+      return { token, expired: Boolean(expiresAt && Date.now() > expiresAt) };
+    } catch {
+      return null;
+    }
+  }
 
+  // Non-darwin (Linux, others)
   try {
-    const creds = JSON.parse(result.stdout.trim());
+    const credPath = path.join(os.homedir(), ".claude", ".credentials.json");
+    const raw = fs.readFileSync(credPath, "utf8");
+    const creds = JSON.parse(raw);
     const token = creds?.claudeAiOauth?.accessToken;
     const expiresAt = creds?.claudeAiOauth?.expiresAt;
     if (!token) return null;
