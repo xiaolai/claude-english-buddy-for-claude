@@ -1,6 +1,6 @@
 {
   "name": "claude-english-buddy",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "English language coach for non-native speakers \u2014 auto-corrects prompts, translates non-English, refines with :: prefix, tracks improvement over time",
   "author": {
     "name": "xiaolai"
