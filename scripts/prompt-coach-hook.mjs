@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 // UserPromptSubmit hook — auto-correct, translate, or refine prompts.
 // Also injects summary_language instruction when configured.
+//
+// Registered globally in hooks/hooks.json: UserPromptSubmit carries no tool
+// name, so the hook config layer cannot filter on prompt content. Filtering
+// therefore lives here, via shouldSkip()/detectMode() in scripts/lib/detect.mjs,
+// which skips — before any API call — prompts that are empty, slash commands,
+// shorter than 10 characters with fewer than 3 words, or opening with a
+// URL/shell-command/bracket token. A skipped prompt produces no systemMessage
+// and no correction; the only thing it can still emit is the summary-language
+// instruction, when summary_language is configured.
 
 import fs from "node:fs";
 import os from "node:os";

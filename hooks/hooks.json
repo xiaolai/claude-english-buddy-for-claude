@@ -4,8 +4,6 @@
     "UserPromptSubmit": [
       {
         "matcher": "*",
-        "description": "Intentionally global — Claude Code's UserPromptSubmit matcher does not support content-based filters, so filtering must happen inside the hook script. The Node script at scripts/prompt-coach-hook.mjs skips: (1) slash commands (prompts starting with `/`), (2) prompts entirely inside a triple-backtick fenced code block, (3) prompts under 10 characters, (4) prompts that look like raw code (detected by token shape). All four filters exit 0 immediately so Claude Code sees no systemMessage and no additionalContext.",
-        "_acceptable_scope": "Content-based filtering is impossible at the hook-config layer on the current Claude Code hook schema; it must live in the script. This is acceptable because the script's fast path is a handful of regex checks before any API or node import cost.",
         "hooks": [
           {
             "type": "command",
