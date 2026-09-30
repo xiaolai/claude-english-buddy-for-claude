@@ -81,6 +81,8 @@ test("hooks are shared: Codex loads the root hooks/hooks.json, so no codex/hooks
     for (const g of groups) for (const h of g.hooks) {
       // Both hosts export CLAUDE_PLUGIN_ROOT to hook commands; quoting survives spaces in the path.
       assert.match(h.command, /"\$\{CLAUDE_PLUGIN_ROOT\}\//, `${event}: unquoted or missing plugin root`);
+      // Codex clamps SessionEnd hooks to 3 s and prints a warning in every session when asked for more.
+      if (event === "SessionEnd") assert.ok((h.timeout ?? 1) <= 3, `SessionEnd timeout ${h.timeout} > 3 s`);
     }
   }
 });
