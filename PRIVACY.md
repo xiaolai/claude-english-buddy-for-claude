@@ -28,7 +28,7 @@ The plugin maintainer (xiaolai) does **not** see, log, store, or aggregate any u
 
 ## How to disable
 
-- **Disable auto-correction** while keeping the plugin installed: set `auto_correct: false` in `.claude-english-buddy.json`, or run `/claude-english-buddy:config --set auto_correct=false`. The hook continues to run but skips API calls.
+- **Disable auto-correction** while keeping the plugin installed: set `auto_correct: false` in `.claude-english-buddy.json`, or run `/claude-english-buddy:config --set auto_correct=false`. The hook continues to run but skips API calls, except for prompts you explicitly start with `::` to request refinement.
 - **Use the dry-run mode**: `/claude-english-buddy:preview <text>` reviews text without submitting a prompt or persisting anything.
 - **Remove local correction history**: delete `$CLAUDE_PLUGIN_DATA/history/`.
 - **Uninstall completely**: `claude plugin uninstall claude-english-buddy@xiaolai`.
