@@ -1,5 +1,5 @@
 // Correction history — persists every correction for trend analysis and reports.
-// Storage: $CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl
+// Storage: $CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl, one file per LOCAL calendar day.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -22,9 +22,29 @@ function ensureDataDir() {
   return dir;
 }
 
+// History is bucketed by the user's local calendar day. Never format a
+// bucket date with toISOString(): that is the UTC day, which in UTC+8 files
+// everything typed before 08:00 under the previous date.
+export function localDate(d = new Date()) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+// The local date n days before today.
+export function daysAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return localDate(d);
+}
+
+// Noon, so stepping by setDate() never lands on a DST-skipped midnight.
+function parseLocalDate(date) {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(y, m - 1, d, 12);
+}
+
 function todayFile() {
-  const date = new Date().toISOString().slice(0, 10);
-  return path.join(ensureDataDir(), `${date}.jsonl`);
+  return path.join(ensureDataDir(), `${localDate()}.jsonl`);
 }
 
 function dateFile(date) {
@@ -78,26 +98,21 @@ export function readDay(date) {
 }
 
 export function readToday() {
-  const date = new Date().toISOString().slice(0, 10);
-  return readDay(date);
+  return readDay(localDate());
 }
 
+// Inclusive range of local dates, each "YYYY-MM-DD".
 export function readRange(startDate, endDate) {
   const records = [];
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    const date = d.toISOString().slice(0, 10);
-    records.push(...readDay(date));
+  const end = parseLocalDate(endDate);
+  for (let d = parseLocalDate(startDate); d <= end; d.setDate(d.getDate() + 1)) {
+    records.push(...readDay(localDate(d)));
   }
   return records;
 }
 
 export function readLastNDays(n) {
-  const end = new Date();
-  const start = new Date();
-  start.setDate(start.getDate() - (n - 1));
-  return readRange(start.toISOString().slice(0, 10), end.toISOString().slice(0, 10));
+  return readRange(daysAgo(n - 1), localDate());
 }
 
 export function listHistoryDates() {

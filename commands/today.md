@@ -11,10 +11,8 @@ allowed-tools: Bash, Glob, Read
 ```bash
 node -e "
   const { todayStats, periodStats, weeklyTrend } = await import('${CLAUDE_PLUGIN_ROOT}/scripts/lib/stats.mjs');
-  const { readDay } = await import('${CLAUDE_PLUGIN_ROOT}/scripts/lib/state.mjs');
-  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-  const yd = yesterday.toISOString().slice(0, 10);
-  const yRecords = readDay(yd);
+  const { readDay, daysAgo } = await import('${CLAUDE_PLUGIN_ROOT}/scripts/lib/state.mjs');
+  const yRecords = readDay(daysAgo(1));
   const yTotal = yRecords.length;
   const yCorrections = yRecords.filter(r => r.mode !== 'clean').length;
   const yRate = yTotal > 0 ? Math.round(yCorrections / yTotal * 100) : 0;

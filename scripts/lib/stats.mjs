@@ -1,6 +1,6 @@
 // Trend analysis — compute stats from correction history.
 
-import { readDay, readToday, readLastNDays } from "./state.mjs";
+import { readDay, readToday, readLastNDays, localDate } from "./state.mjs";
 import { parseAnnotations } from "./annotations.mjs";
 
 function countByMode(records) {
@@ -38,7 +38,7 @@ export function todayStats() {
   const patterns = extractPatterns(records);
 
   return {
-    date: new Date().toISOString().slice(0, 10),
+    date: localDate(),
     total,
     corrections,
     clean: counts.clean,
@@ -81,8 +81,7 @@ export function weeklyTrend(weeks = 4) {
 
     const records = [];
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const date = d.toISOString().slice(0, 10);
-      records.push(...readDay(date));
+      records.push(...readDay(localDate(d)));
     }
 
     const total = records.length;
@@ -92,8 +91,8 @@ export function weeklyTrend(weeks = 4) {
     const avgPerDay = total > 0 ? Math.round((corrections / 7) * 10) / 10 : 0;
 
     trend.push({
-      weekStart: start.toISOString().slice(0, 10),
-      weekEnd: end.toISOString().slice(0, 10),
+      weekStart: localDate(start),
+      weekEnd: localDate(end),
       total,
       corrections,
       errorRate,
