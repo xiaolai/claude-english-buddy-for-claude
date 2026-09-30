@@ -1,6 +1,6 @@
 ---
 name: claude-english-buddy-grammar-fundamentals
-description: "Core English grammar rules most likely to trip non-native developers: articles, subject-verb agreement, tense consistency, prepositions, countable vs mass nouns, comparatives. Use when reviewing grammar correctness of prose written for developer contexts (commits, docs, emails)."
+description: "English grammar for developer prose: articles, agreement, tense, prepositions."
 ---
 
 # Grammar Fundamentals

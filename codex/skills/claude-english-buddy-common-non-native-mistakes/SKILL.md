@@ -1,6 +1,6 @@
 ---
 name: claude-english-buddy-common-non-native-mistakes
-description: "Recurring error patterns from non-native English speakers in developer contexts: article misuse, preposition confusion, tense mismatch, 'I am agree'-style anti-patterns, and other frequent L2 slips. Use when scanning for patterns a reader can map back to familiar mistakes rather than rediscover from first principles."
+description: "Recurring non-native English slips: articles, prepositions, tense, 'I am agree'."
 ---
 
 # Common Non-Native Mistakes

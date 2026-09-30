@@ -1,6 +1,6 @@
 ---
 name: technical-writing
-description: "Technical writing patterns for developer prose: API documentation structure, README shape, error-message wording, terminology consistency, and the active vs passive voice trade-off. Use when the text under review is documentation, a README, an API reference, or an error string."
+description: "Technical writing: API docs, README shape, error messages, terminology, voice."
 version: 0.1.0
 user-invocable: false
 ---

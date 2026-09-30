@@ -1,6 +1,6 @@
 ---
 name: claude-english-buddy-writing-guide
-description: "Meta-skill that routes to the five focused writing skills in this plugin. Loads nothing substantive on its own — read this to decide which of $claude-english-buddy-grammar-fundamentals, $claude-english-buddy-punctuation-rules, $claude-english-buddy-tone-calibration, $claude-english-buddy-technical-writing, or $claude-english-buddy-common-non-native-mistakes to consult."
+description: "Router to this plugin's five writing skills: decide which one to consult."
 ---
 
 # Writing Guide (Meta-Skill)

@@ -1,6 +1,6 @@
 ---
 name: punctuation-rules
-description: "Punctuation conventions for developer prose: commas (serial, Oxford, clause-joining), semicolons, colons, hyphens vs en-dashes vs em-dashes, apostrophes, quotation marks. Use when reviewing punctuation of documentation, commit messages, or any prose where mis-pointing changes meaning."
+description: "Punctuation for developer prose: commas, semicolons, colons, dashes, apostrophes."
 version: 0.1.0
 user-invocable: false
 ---

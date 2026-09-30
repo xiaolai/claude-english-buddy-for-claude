@@ -1,6 +1,6 @@
 ---
 name: writing-guide
-description: "Meta-skill that routes to the five focused writing skills in this plugin. Loads nothing substantive on its own — read this to decide which of grammar-fundamentals, punctuation-rules, tone-calibration, technical-writing, or common-non-native-mistakes to consult."
+description: "Router to this plugin's five writing skills: decide which one to consult."
 version: 0.2.0
 user-invocable: false
 ---

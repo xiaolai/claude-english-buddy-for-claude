@@ -1,6 +1,6 @@
 ---
 name: claude-english-buddy-tone-calibration
-description: "Per-context tone rubrics for developer communication: commit messages, PR descriptions, code comments, API docs, emails, inline chat. Use when judging whether the register and formality of a piece of text fit its destination, not just whether it is grammatical."
+description: "Tone rubrics per destination: commits, PRs, code comments, docs, emails, chat."
 ---
 
 # Tone Calibration
