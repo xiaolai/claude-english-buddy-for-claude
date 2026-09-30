@@ -64,7 +64,7 @@ The UserPromptSubmit hook has four modes:
 - **correct**: English with errors → fix and show corrections via `systemMessage`
 - **translate**: Non-English detected (ASCII ratio < 85%) → translate via `systemMessage`
 - **refine**: `::` prefix → rewrite into precise prompt via `systemMessage`
-- **skip**: slash commands, short prompts, code patterns → exit 0
+- **skip**: slash commands, `$skill` invocations (Codex), short prompts, code patterns → exit 0
 
 All modes inject corrected/translated text into `hookSpecificOutput.additionalContext` so the model acts on the clean version. If `summary_language` is configured, the summary instruction is appended to that context in all modes. Never emit `additionalContext` at the top level: Claude Code and Codex both drop it silently (`tests/hook-output.test.mjs` guards this).
 

@@ -29,7 +29,8 @@ export function detectLanguage(text) {
 
 export function shouldSkip(prompt) {
   if (!prompt || prompt.trim().length === 0) return true;
-  if (prompt.startsWith("/")) return true;
+  // Slash commands (Claude Code) and $skill invocations (Codex) are commands, not prose.
+  if (prompt.startsWith("/") || prompt.startsWith("$")) return true;
 
   // Too short — use both char and word count (CJK has no spaces)
   const charCount = [...prompt].length;
