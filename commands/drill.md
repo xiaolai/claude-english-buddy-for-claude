@@ -4,6 +4,7 @@ description: Spot-quiz on your top recurring English mistakes — presents one s
 argument-hint: "[--category <name>] [--rounds N]"
 allowed-tools: Bash, Read, Glob, AskUserQuestion
 model: sonnet
+disable-model-invocation: true
 ---
 
 ## User Input

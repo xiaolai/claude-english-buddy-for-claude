@@ -2,6 +2,7 @@
 name: today
 description: Today's language report — corrections made, recurring mistakes, lessons, and improvement trend.
 allowed-tools: Bash, Glob, Read
+disable-model-invocation: true
 ---
 
 ## Workflow
@@ -87,7 +88,7 @@ user: "/claude-english-buddy:today"
 assistant: "Loading today's correction history and comparing against yesterday and the 7-day average."
 </example>
 <example>
-Context: User wants a window wider than today.
-user: "Show me my English report for the last 3 days."
+Context: User typed the today report but wants a window wider than today.
+user: "/claude-english-buddy:today last 3 days"
 assistant: "/claude-english-buddy:today covers today only, compared with yesterday and the 7-day average. For a 3-day window I'll run /claude-english-buddy:stats --days 3."
 </example>

@@ -70,6 +70,10 @@ package.json            Node.js project config
 
 ## Conventions
 
+### Command visibility
+
+`today`, `mistakes`, `config`, `preview` and `drill` set `disable-model-invocation: true`: they are dashboards the user types, and hiding them keeps their descriptions out of every session's skill listing. `review` and `stats` stay model-invocable, because `review` answers a plain request for an English review and `today.md` routes a request for a wider window to `stats`. Before hiding a command, check that no command, skill, agent, hook output or script tells Claude to invoke it.
+
 ### Hook behavior
 
 The UserPromptSubmit hook has four modes:

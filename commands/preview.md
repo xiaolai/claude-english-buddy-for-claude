@@ -4,6 +4,7 @@ description: Dry-run review — show what WOULD be corrected in a prompt WITHOUT
 argument-hint: "<text to preview>"
 allowed-tools: Bash, Read, Task, AskUserQuestion
 model: sonnet
+disable-model-invocation: true
 ---
 
 ## User Input

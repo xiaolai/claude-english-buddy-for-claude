@@ -3,6 +3,7 @@ name: config
 description: Configure claude-english-buddy — set language, strictness, toggle auto-correction.
 argument-hint: "[--show | --set key=value]"
 allowed-tools: Bash, Read
+disable-model-invocation: true
 ---
 
 ## User Input

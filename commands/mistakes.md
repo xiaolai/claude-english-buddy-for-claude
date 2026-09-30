@@ -3,6 +3,7 @@ name: mistakes
 description: Your top recurring English mistakes — all-time patterns that need attention.
 argument-hint: "[--top N]"
 allowed-tools: Bash, Glob, Read
+disable-model-invocation: true
 ---
 
 ## User Input
