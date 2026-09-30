@@ -31,6 +31,12 @@ function dateFile(date) {
   return path.join(getDataDir(), `${date}.jsonl`);
 }
 
+// The hook passes session_id from its stdin (Claude Code and Codex both send
+// it); CLAUDE_SESSION_ID is kept as a fallback for older callers.
+function sessionOf(entry) {
+  return entry.session || process.env.CLAUDE_SESSION_ID || null;
+}
+
 export function logCorrection(entry) {
   const record = {
     ts: new Date().toISOString(),
@@ -39,19 +45,19 @@ export function logCorrection(entry) {
     corrected: entry.corrected,
     annotations: entry.annotations || null,
     pattern: entry.pattern || null,
-    session: process.env.CLAUDE_SESSION_ID || null,
+    session: sessionOf(entry),
   };
   fs.appendFileSync(todayFile(), JSON.stringify(record) + "\n", "utf8");
   return record;
 }
 
-export function logClean() {
+export function logClean(entry = {}) {
   const record = {
     ts: new Date().toISOString(),
     mode: "clean",
     original: null,
     corrected: null,
-    session: process.env.CLAUDE_SESSION_ID || null,
+    session: sessionOf(entry),
   };
   fs.appendFileSync(todayFile(), JSON.stringify(record) + "\n", "utf8");
   return record;

@@ -33,7 +33,7 @@ Every record has these fields; `original`, `corrected`, `annotations`, `pattern`
 | `corrected` | string or null | What the hook produced (null for `clean`) |
 | `annotations` | string or null | Diff string. Current format: one fix per line, `wrong → right (category)`, e.g. `its → it's (apostrophe)\nmodul → module (spelling)`. Legacy format still present in older files: `(its got>it has; modul>module)` |
 | `pattern` | string or null | Dominant pattern label (optional) |
-| `session` | string or null | `CLAUDE_SESSION_ID` when the hook ran |
+| `session` | string or null | `session_id` from the hook input (Claude Code and Codex both send it) |
 
 ### Mode Semantics
 

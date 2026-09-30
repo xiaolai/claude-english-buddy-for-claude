@@ -63,3 +63,12 @@ test("readDay returns empty for non-existent date", () => {
     assert.deepEqual(records, []);
   });
 });
+
+test("records carry the session id passed by the hook", () => {
+  withTempData(() => {
+    logCorrection({ mode: "correct", original: "a", corrected: "b", session: "sess-42" });
+    logClean({ session: "sess-42" });
+    const records = readToday();
+    assert.deepEqual(records.map((r) => r.session), ["sess-42", "sess-42"]);
+  });
+});

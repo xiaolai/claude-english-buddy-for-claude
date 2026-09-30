@@ -244,6 +244,7 @@ function main() {
   const input = readStdin();
   const prompt = input.prompt || "";
   const cwd = input.cwd || process.cwd();
+  const session = input.session_id || null;
   const config = resolveConfig(cwd);
 
   // Build summary instruction
@@ -272,7 +273,7 @@ function main() {
       return;
     }
 
-    logCorrection({ mode: "refine", original: detection.text, corrected: result });
+    logCorrection({ mode: "refine", session, original: detection.text, corrected: result });
 
     let ctx = `IMPORTANT: The user used :: to request prompt refinement. Their refined intent is: ${result}. Follow this refined prompt as the user's actual request.`;
     if (summaryCtx) ctx += " " + summaryCtx;
@@ -296,7 +297,7 @@ function main() {
     const translated = lines[0] || result;
     const sourceLang = lines[1] || "";
 
-    logCorrection({ mode: "translate", original: detection.text, corrected: translated, annotations: sourceLang });
+    logCorrection({ mode: "translate", session, original: detection.text, corrected: translated, annotations: sourceLang });
 
     let ctx = `Translated prompt: ${translated}`;
     if (summaryCtx) ctx += " " + summaryCtx;
@@ -318,7 +319,7 @@ function main() {
   }
 
   if (result === "CLEAN") {
-    logClean();
+    logClean({ session });
     if (summaryCtx) emit({ additionalContext: summaryCtx });
     return;
   }
@@ -336,12 +337,12 @@ function main() {
   // If the model emitted zero real corrections (everything was a no-op),
   // treat the prompt as clean rather than logging a misleading entry.
   if (parsed.length === 0) {
-    logClean();
+    logClean({ session });
     if (summaryCtx) emit({ additionalContext: summaryCtx });
     return;
   }
 
-  logCorrection({ mode: "correct", original: detection.text, corrected, annotations });
+  logCorrection({ mode: "correct", session, original: detection.text, corrected, annotations });
 
   let ctx = `Corrected prompt: ${corrected}`;
   if (summaryCtx) ctx += " " + summaryCtx;
