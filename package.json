@@ -1,6 +1,6 @@
 {
   "name": "claude-english-buddy",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "type": "module",
   "description": "English language coach for non-native speakers using Claude Code \u2014 auto-correct, translate, refine, and track improvement over time",
