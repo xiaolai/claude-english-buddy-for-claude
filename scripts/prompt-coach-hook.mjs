@@ -32,9 +32,17 @@ function readStdin() {
 // Pending user-visible warning (auth failure). Drained on next emit().
 let authWarning = null;
 
-function emit(obj) {
+// Callers pass { additionalContext, systemMessage } or { decision, reason }.
+// Context must travel as hookSpecificOutput.additionalContext: Claude Code and
+// Codex both drop a top-level additionalContext without an error, so the model
+// would never see the corrected, translated or refined prompt.
+function emit({ additionalContext, ...rest }) {
+  const obj = { ...rest };
+  if (additionalContext) {
+    obj.hookSpecificOutput = { hookEventName: "UserPromptSubmit", additionalContext };
+  }
   if (authWarning) {
-    obj = { ...obj, systemMessage: obj.systemMessage ? `${authWarning}\n${obj.systemMessage}` : authWarning };
+    obj.systemMessage = obj.systemMessage ? `${authWarning}\n${obj.systemMessage}` : authWarning;
     authWarning = null;
   }
   process.stdout.write(JSON.stringify(obj) + "\n");

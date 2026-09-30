@@ -66,7 +66,7 @@ The UserPromptSubmit hook has four modes:
 - **refine**: `::` prefix → rewrite into precise prompt via `systemMessage`
 - **skip**: slash commands, short prompts, code patterns → exit 0
 
-All modes inject corrected/translated text into `additionalContext` so Claude acts on the clean version. If `summary_language` is configured, the summary instruction is appended to `additionalContext` in all modes.
+All modes inject corrected/translated text into `hookSpecificOutput.additionalContext` so the model acts on the clean version. If `summary_language` is configured, the summary instruction is appended to that context in all modes. Never emit `additionalContext` at the top level: Claude Code and Codex both drop it silently (`tests/hook-output.test.mjs` guards this).
 
 ### State storage
 
