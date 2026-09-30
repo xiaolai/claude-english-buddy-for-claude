@@ -70,7 +70,7 @@ All modes inject corrected/translated text into `hookSpecificOutput.additionalCo
 
 ### State storage
 
-Correction history stored as JSONL in `$CLAUDE_PLUGIN_DATA/claude-english-buddy/history/YYYY-MM-DD.jsonl`. One line per correction event:
+Correction history stored as JSONL in `$CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl`. One line per correction event:
 
 ```json
 {"ts":"...","mode":"correct","original":"...","corrected":"...","annotations":"(...)","session":"..."}

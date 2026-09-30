@@ -16,7 +16,7 @@ Every UserPromptSubmit hook call appends one line to the day's JSONL file. The l
 ### File Layout
 
 ```
-$CLAUDE_PLUGIN_DATA/claude-english-buddy/history/YYYY-MM-DD.jsonl
+$CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl
 ```
 
 One file per calendar day. One JSON object per line. Files are append-only.
@@ -59,7 +59,7 @@ node -e "
 
 When the library import fails (missing node_modules, wrong path), commands MUST be able to fall back to raw `Glob` + `Read`:
 
-1. `Glob` the history dir: `$CLAUDE_PLUGIN_DATA/claude-english-buddy/history/*.jsonl`
+1. `Glob` the history dir: `$CLAUDE_PLUGIN_DATA/history/*.jsonl`
 2. `Read` the target file(s).
 3. Split by `\n`, filter empty lines, `JSON.parse` each line inside a `try/catch` (skip malformed lines).
 4. Build the aggregate manually.

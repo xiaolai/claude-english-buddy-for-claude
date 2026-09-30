@@ -30,7 +30,7 @@ node -e "
 Parse the JSON output. If `today.total` is 0: respond "No prompts processed today yet." and STOP.
 
 If the script fails (module not found, node error, etc.), read the JSONL files directly:
-1. Use Glob to find `$CLAUDE_PLUGIN_DATA/claude-english-buddy/history/*.jsonl`
+1. Use Glob to find `$CLAUDE_PLUGIN_DATA/history/*.jsonl`
 2. Read today's file with Read tool
 3. Count records manually and build the report from raw data
 

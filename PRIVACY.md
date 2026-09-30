@@ -17,7 +17,7 @@ Anthropic's privacy policy applies to data sent through the Anthropic API. AWS's
 
 ## What is stored locally
 
-- `$CLAUDE_PLUGIN_DATA/claude-english-buddy/history/YYYY-MM-DD.jsonl` — a JSON-lines file containing each prompt, its correction, and metadata (timestamp, session id, correction category). Stored on your local filesystem only; **never transmitted**.
+- `$CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl` — a JSON-lines file containing each prompt, its correction, and metadata (timestamp, session id, correction category). Stored on your local filesystem only; **never transmitted**.
 - Configuration in `~/.claude/hooks/prompt_coach.json` (global) or `.claude-english-buddy.json` (project).
 
 The local history powers `/claude-english-buddy:today`, `/claude-english-buddy:stats`, `/claude-english-buddy:mistakes`, and `/claude-english-buddy:drill` — all of which read from your local filesystem only.
@@ -30,7 +30,7 @@ The plugin maintainer (xiaolai) does **not** see, log, store, or aggregate any u
 
 - **Disable auto-correction** while keeping the plugin installed: set `auto_correct: false` in `.claude-english-buddy.json`, or run `/claude-english-buddy:config --set auto_correct=false`. The hook continues to run but skips API calls.
 - **Use the dry-run mode**: `/claude-english-buddy:preview <text>` reviews text without submitting a prompt or persisting anything.
-- **Remove local correction history**: delete `$CLAUDE_PLUGIN_DATA/claude-english-buddy/history/`.
+- **Remove local correction history**: delete `$CLAUDE_PLUGIN_DATA/history/`.
 - **Uninstall completely**: `claude plugin uninstall claude-english-buddy@xiaolai`.
 
 ## Third parties
@@ -40,7 +40,7 @@ The plugin maintainer (xiaolai) does **not** see, log, store, or aggregate any u
 
 ## Data deletion
 
-There is no centralized data to delete on the maintainer's side. To remove your local data: delete `$CLAUDE_PLUGIN_DATA/claude-english-buddy/` and uninstall the plugin.
+There is no centralized data to delete on the maintainer's side. To remove your local data: delete `$CLAUDE_PLUGIN_DATA/` (this plugin's own data directory) and uninstall the plugin.
 
 ## Contact
 

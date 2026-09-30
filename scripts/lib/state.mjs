@@ -1,5 +1,5 @@
 // Correction history — persists every correction for trend analysis and reports.
-// Storage: $CLAUDE_PLUGIN_DATA/claude-english-buddy/history/YYYY-MM-DD.jsonl
+// Storage: $CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl
 
 import fs from "node:fs";
 import path from "node:path";
