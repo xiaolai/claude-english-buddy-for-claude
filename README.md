@@ -2,7 +2,7 @@
 
 [![Validated by NLPM](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/xiaolai/claude-english-buddy-for-claude/main/nlpm-badge.json)](https://github.com/xiaolai/claude-english-buddy-for-claude/blob/main/nlpm-badge.json)
 
-English language coach for non-native speakers who use Claude Code daily.
+English language coach for non-native speakers who use Claude Code or Codex CLI daily.
 
 ## The Problem
 
@@ -76,6 +76,21 @@ Two install paths — both reach the same code. Pick one:
 ```
 
 > **Install fails with "Plugin not found in marketplace 'xiaolai'"?** Your local marketplace clone is stale. Run `claude plugin marketplace update xiaolai` and retry — `plugin install` does not auto-refresh. (The community marketplace doesn't have this caveat — Anthropic's CI keeps it current.)
+
+### Codex CLI
+
+```bash
+codex plugin marketplace add xiaolai/claude-plugin-marketplace
+codex plugin add claude-english-buddy@xiaolai
+```
+
+Then start `codex` and run `/hooks` to trust the plugin's hooks; Codex does not run plugin hooks until you do. The skills work without that step, but nothing is corrected or recorded.
+
+Codex uses skills instead of slash commands: `$claude-english-buddy-today`, `$claude-english-buddy-stats`, `$claude-english-buddy-mistakes`, `$claude-english-buddy-drill`, `$claude-english-buddy-config`, `$claude-english-buddy-review`, and `$claude-english-buddy-preview`, or describe what you want and Codex picks the skill. Differences from Claude Code:
+
+- The hook calls Claude Haiku with your own Anthropic credentials (`ANTHROPIC_API_KEY`, `CLAUDE_CODE_OAUTH_TOKEN`, or a signed-in Claude Code on macOS). Without them, only the review skills work.
+- History is kept per host: prompts typed in Codex are reported by the Codex skills, and prompts typed in Claude Code by the Claude commands. Configuration is shared.
+- The `SessionEnd` summary does not appear in Codex.
 
 ## Commands
 
@@ -199,7 +214,7 @@ The goal is not perfection. The goal is **visible progress** — seeing your err
 ## Tests
 
 ```bash
-npm test    # detection, state, stats, annotations, and the hook's wire format
+npm test    # detection, state, stats, annotations, the hook's wire format, history reports, and the Codex layout
 ```
 
 ## License

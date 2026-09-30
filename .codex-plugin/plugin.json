@@ -1,0 +1,39 @@
+{
+  "name": "claude-english-buddy",
+  "version": "0.5.6",
+  "description": "English language coach for non-native speakers — auto-corrects prompts, translates non-English, refines with :: prefix, tracks improvement over time",
+  "author": {
+    "name": "xiaolai"
+  },
+  "homepage": "https://github.com/xiaolai/claude-english-buddy-for-claude",
+  "repository": "https://github.com/xiaolai/claude-english-buddy-for-claude",
+  "license": "ISC",
+  "keywords": [
+    "english",
+    "language",
+    "coaching",
+    "grammar",
+    "translation",
+    "non-native"
+  ],
+  "skills": "./codex/skills/",
+  "interface": {
+    "displayName": "English Buddy",
+    "shortDescription": "English coach for non-native speakers: corrects, translates, or refines each prompt and tracks your progress",
+    "longDescription": "A UserPromptSubmit hook shows you the corrected English of every prompt you type, translates prompts written in another language, and rewrites a rough idea into a precise prompt when you start it with ::. Codex then works from the clean version. Every correction is logged locally, so the report skills can show today's mistakes, long-term trends, your recurring blind spots, and a drill on them. Review skills check any text (commit, PR, doc, email) for grammar, tone, and clarity. The hook sends each prompt to Claude Haiku using your own Anthropic credentials (ANTHROPIC_API_KEY, CLAUDE_CODE_OAUTH_TOKEN, or a signed-in Claude Code on macOS); without them only the review skills work.",
+    "developerName": "xiaolai",
+    "category": "Writing",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Show me today's English report with $claude-english-buddy-today.",
+      "Review this commit message with $claude-english-buddy-review.",
+      "Drill me on my recurring English mistakes with $claude-english-buddy-drill."
+    ],
+    "websiteURL": "https://github.com/xiaolai/claude-english-buddy-for-claude",
+    "privacyPolicyURL": "https://github.com/xiaolai/claude-english-buddy-for-claude/blob/main/PRIVACY.md",
+    "screenshots": []
+  }
+}

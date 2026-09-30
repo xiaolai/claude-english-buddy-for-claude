@@ -1,6 +1,8 @@
 # claude-english-buddy
 
-English language coach for non-native speakers using Claude Code. Auto-corrects prompts via UserPromptSubmit hook, tracks corrections, generates daily reports.
+English language coach for non-native speakers using Claude Code or Codex CLI. Auto-corrects prompts via UserPromptSubmit hook, tracks corrections, generates daily reports.
+
+The plugin ships two layouts from one repo: `.claude-plugin/` + `commands/` + `agents/` + `skills/` for Claude Code, and `.codex-plugin/` + `codex/skills/` for Codex. Both hosts load the same `hooks/hooks.json` and `scripts/`. The Codex tree is hand-built; read `codex/AGENTS.md` before changing it, and never regenerate it with `build-codex.mjs --force`.
 
 ## Prerequisites
 
@@ -45,6 +47,7 @@ hooks/
 scripts/
   prompt-coach-hook.mjs   Main hook — correct/translate/refine
   session-end-hook.mjs    Session summary on exit
+  history-report.mjs      History reports as JSON for the Codex skills (--host codex)
   lib/
     detect.mjs          Language detection (ASCII ratio heuristic)
     state.mjs           Correction history (JSONL per day)
@@ -53,6 +56,15 @@ tests/
   detect.test.mjs       Language detection tests
   state.test.mjs        State persistence tests
   stats.test.mjs        Stats computation tests
+  annotations.test.mjs  Annotation parser tests
+  hook-output.test.mjs  Hook wire format, run as a real process
+  history-report.test.mjs  history-report.mjs CLI, run as a real process
+  codex-layout.test.mjs Codex layout invariants
+.codex-plugin/
+  plugin.json           Codex manifest (skills: ./codex/skills/)
+codex/
+  AGENTS.md             Codex layout notes: paths, hooks, differences from Claude Code
+  skills/               17 hand-built Codex skills, prefixed claude-english-buddy-
 package.json            Node.js project config
 ```
 
