@@ -1,18 +1,6 @@
 ---
 name: today
-description: |
-  Today's language report — corrections made, recurring mistakes, lessons, and improvement trend.
-  <example>
-  Context: User wants a quick summary of the corrections made during today's session.
-  user: "/claude-english-buddy:today"
-  assistant: "Loading today's correction history and comparing against yesterday and the 7-day average."
-  </example>
-  <example>
-  Context: User wants to widen the window beyond just today.
-  user: "/claude-english-buddy:today --days 3"
-  assistant: "Generating a report covering the last 3 days of prompts, corrections, and recurring patterns."
-  </example>
-argument-hint: "[--days N]"
+description: Today's language report — corrections made, recurring mistakes, lessons, and improvement trend.
 allowed-tools: Bash, Glob, Read
 ---
 
@@ -92,3 +80,16 @@ If the script fails (module not found, node error, etc.), read the JSONL files d
 {If error rate is flat: "Holding steady. Focus on your recurring patterns to break through."}
 {If error rate is increasing: "Error rate is up — try to slow down and re-read before submitting."}
 ```
+
+## Examples
+
+<example>
+Context: User wants a quick summary of the corrections made during today's session.
+user: "/claude-english-buddy:today"
+assistant: "Loading today's correction history and comparing against yesterday and the 7-day average."
+</example>
+<example>
+Context: User wants a window wider than today.
+user: "Show me my English report for the last 3 days."
+assistant: "/claude-english-buddy:today covers today only, compared with yesterday and the 7-day average. For a 3-day window I'll run /claude-english-buddy:stats --days 3."
+</example>

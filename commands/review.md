@@ -1,17 +1,6 @@
 ---
 name: review
-description: |
-  Deep English review of any text — commit messages, PR descriptions, docs, emails.
-  <example>
-  Context: User pastes a draft PR description inline and wants a deep review before posting.
-  user: "/claude-english-buddy:review This PR fix the parser bug and add tests for edge case"
-  assistant: "Reviewing the inline text for grammar, clarity, tone, structure, and technical accuracy."
-  </example>
-  <example>
-  Context: User wants to review a longer document saved as a file.
-  user: "/claude-english-buddy:review docs/release-notes.md"
-  assistant: "Reading docs/release-notes.md and producing a full review with corrected version, changes table, and summary."
-  </example>
+description: Deep English review of any text — commit messages, PR descriptions, docs, emails.
 argument-hint: "<text or file path>"
 allowed-tools: Bash, Read, AskUserQuestion
 ---
@@ -28,7 +17,7 @@ $ARGUMENTS
 
 | Input | Action |
 |-------|--------|
-| File path | Read the file |
+| File path | Read the file. If it does not exist or cannot be read, respond "File not found: {path}" and STOP. |
 | Inline text | Use directly |
 | (empty) | Ask for text via AskUserQuestion |
 
@@ -76,3 +65,16 @@ Analyze the text for:
 
 {2-3 sentence assessment: what's good, what needs work, one actionable tip.}
 ```
+
+## Examples
+
+<example>
+Context: User pastes a draft PR description inline and wants a deep review before posting.
+user: "/claude-english-buddy:review This PR fix the parser bug and add tests for edge case"
+assistant: "Reviewing the inline text for grammar, clarity, tone, structure, and technical accuracy."
+</example>
+<example>
+Context: User wants to review a longer document saved as a file.
+user: "/claude-english-buddy:review docs/release-notes.md"
+assistant: "Reading docs/release-notes.md and producing a full review with corrected version, changes table, and summary."
+</example>

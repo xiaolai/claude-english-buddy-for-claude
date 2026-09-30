@@ -2,6 +2,7 @@
 name: common-non-native-mistakes
 description: "Recurring error patterns from non-native English speakers in developer contexts: article misuse, preposition confusion, tense mismatch, 'I am agree'-style anti-patterns, and other frequent L2 slips. Use when scanning for patterns a reader can map back to familiar mistakes rather than rediscover from first principles."
 version: 0.1.0
+user-invocable: false
 ---
 
 # Common Non-Native Mistakes
@@ -103,7 +104,7 @@ Uncountable nouns that look like they should be pluralizable:
 
 ## Word-Order Inversion
 
-English expects strict Subject–Verb–Object. Moving pieces around (as is natural in some languages) reads as broken.
+English expects strict Subject–Verb–Object. Moving pieces around (as is natural in languages with flexible or verb-second word order, such as German, Dutch, or Spanish) reads as broken.
 
 | Wrong | Right |
 |-------|-------|

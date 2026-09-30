@@ -1,7 +1,11 @@
 ---
 description: "Shared: correction-history JSONL format and parsing pattern"
 user-invocable: false
+disable-model-invocation: true
 ---
+
+> **Plugin root:** this file is read as plain text, so `${CLAUDE_PLUGIN_ROOT}` below is not expanded, and it is unset in your shell. Before running any command here, replace it with this plugin's root: the directory two levels above this file (`<root>/commands/shared/`).
+
 <!-- Shared partial: JSONL parser -->
 <!-- Referenced by: today, stats, mistakes, drill. Do not use standalone. -->
 
@@ -19,7 +23,7 @@ One file per calendar day. One JSON object per line. Files are append-only.
 
 ### Record Shape
 
-Every record has these fields (some nullable):
+Every record has these fields; `original`, `corrected`, `annotations`, `pattern` and `session` may be null:
 
 | Field | Type | Notes |
 |-------|------|-------|
@@ -67,7 +71,7 @@ Within the parsed records, corrections are every record where `mode !== "clean"`
 Prefer the shared parser:
 
 ```js
-const { parseAnnotations } = await import(`${process.env.CLAUDE_PLUGIN_ROOT}/scripts/lib/annotations.mjs`);
+const { parseAnnotations } = await import('${CLAUDE_PLUGIN_ROOT}/scripts/lib/annotations.mjs');
 const fixes = parseAnnotations(record.annotations); // [{ original, corrected, category }, ...]
 ```
 

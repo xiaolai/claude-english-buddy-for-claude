@@ -2,6 +2,7 @@
 name: punctuation-rules
 description: "Punctuation conventions for developer prose: commas (serial, Oxford, clause-joining), semicolons, colons, hyphens vs en-dashes vs em-dashes, apostrophes, quotation marks. Use when reviewing punctuation of documentation, commit messages, or any prose where mis-pointing changes meaning."
 version: 0.1.0
+user-invocable: false
 ---
 
 # Punctuation Rules
@@ -66,7 +67,7 @@ The clause before a colon must be a complete sentence. "Such as: A, B, C" is wro
 
 | Mark | Character | Use |
 |------|-----------|-----|
-| Hyphen | `-` | Compound modifiers before a noun ("command-line tool"), some compound nouns ("well-known"), line breaks |
+| Hyphen | `-` | Compound modifiers before a noun ("command-line tool"), compound nouns that the dictionary spells with a hyphen ("check-in", "mother-in-law"), line breaks |
 | En dash | `–` | Ranges ("pages 10–20", "Monday–Friday"), scores ("Home–Away 3–1") |
 | Em dash | `—` | Parenthetical or break in thought — use sparingly in technical prose |
 

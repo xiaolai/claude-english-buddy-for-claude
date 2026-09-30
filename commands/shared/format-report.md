@@ -1,6 +1,7 @@
 ---
 description: "Shared: markdown table schemas for stats, mistakes, and today reports"
 user-invocable: false
+disable-model-invocation: true
 ---
 <!-- Shared partial: format report -->
 <!-- Referenced by: today, stats, mistakes. Do not use standalone. -->

@@ -2,6 +2,7 @@
 name: tone-calibration
 description: "Per-context tone rubrics for developer communication: commit messages, PR descriptions, code comments, API docs, emails, inline chat. Use when judging whether the register and formality of a piece of text fit its destination, not just whether it is grammatical."
 version: 0.1.0
+user-invocable: false
 ---
 
 # Tone Calibration
@@ -116,7 +117,7 @@ Before emitting a tone judgement, ask:
 4. Does the phrasing contain wordy constructions that the concise table above would cut?
 5. Does the formality match the audience?
 
-If any of (1)–(5) is off, that is a tone issue — even if every word is correctly spelled.
+If any of (1)–(5) is off, that is a tone issue — even if the text has no spelling or grammar errors.
 
 ## Scope
 

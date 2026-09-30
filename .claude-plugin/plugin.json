@@ -1,7 +1,7 @@
 {
   "name": "claude-english-buddy",
   "version": "0.5.4",
-  "description": "English language coach for non-native speakers \u2014 auto-corrects prompts, translates non-English, refines with :: prefix, tracks improvement over time",
+  "description": "English language coach for non-native speakers — auto-corrects prompts, translates non-English, refines with :: prefix, tracks improvement over time",
   "author": {
     "name": "xiaolai"
   },
@@ -14,5 +14,8 @@
     "non-native"
   ],
   "license": "ISC",
-  "repository": "https://github.com/xiaolai/claude-english-buddy-for-claude"
+  "repository": "https://github.com/xiaolai/claude-english-buddy-for-claude",
+  "skills": [
+    "./skills/claude-english-buddy"
+  ]
 }

@@ -1,17 +1,6 @@
 ---
 name: stats
-description: |
-  Long-term correction trends — error rate over time, most common mistakes, improvement trajectory.
-  <example>
-  Context: User wants the default 30-day view of their language stats.
-  user: "/claude-english-buddy:stats"
-  assistant: "Computing the last 30 days of prompts, corrections, weekly trend, and top recurring mistakes."
-  </example>
-  <example>
-  Context: User wants a tighter 7-day window to see recent progress.
-  user: "/claude-english-buddy:stats --days 7"
-  assistant: "Generating a 7-day stats report with weekly trend and top patterns."
-  </example>
+description: Long-term correction trends — error rate over time, most common mistakes, improvement trajectory.
 argument-hint: "[--days N]"
 allowed-tools: Bash, Glob, Read
 ---
@@ -77,3 +66,16 @@ State the verdict in one sentence with the delta, e.g. "Improving — error rate
 
 {Focus areas: group the full pattern list by category (spelling, grammar, punctuation, word-choice, article, preposition). Report the top 3 categories by total occurrence count. For each of those 3, list the single highest-count pattern and the category's share of total corrections as a percentage.}
 ```
+
+## Examples
+
+<example>
+Context: User wants the default 30-day view of their language stats.
+user: "/claude-english-buddy:stats"
+assistant: "Computing the last 30 days of prompts, corrections, weekly trend, and top recurring mistakes."
+</example>
+<example>
+Context: User wants a tighter 7-day window to see recent progress.
+user: "/claude-english-buddy:stats --days 7"
+assistant: "Generating a 7-day stats report with weekly trend and top patterns."
+</example>

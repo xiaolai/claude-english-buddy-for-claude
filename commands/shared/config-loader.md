@@ -1,7 +1,11 @@
 ---
 description: "Shared: unified config load across claude-english-buddy commands"
 user-invocable: false
+disable-model-invocation: true
 ---
+
+> **Plugin root:** this file is read as plain text, so `${CLAUDE_PLUGIN_ROOT}` below is not expanded, and it is unset in your shell. Before running any command here, replace it with this plugin's root: the directory two levels above this file (`<root>/commands/shared/`).
+
 <!-- Shared partial: config loader -->
 <!-- Referenced by: config, today, stats, mistakes, preview, drill. Do not use standalone. -->
 
