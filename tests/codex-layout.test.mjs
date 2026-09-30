@@ -76,7 +76,9 @@ test("Codex manifest points at the skills tree and matches the Claude version", 
 });
 
 test("hooks are shared: Codex loads the root hooks/hooks.json, so no codex/hooks copy exists", () => {
-  assert.ok(!fs.existsSync(path.join(ROOT, "codex", "hooks")), "codex/hooks would be ignored or fire twice");
+  // A manifest "hooks" path replaces the root file rather than adding to it (checked on Codex 0.159.2),
+  // so a codex/hooks copy is either dead or a second source of truth to keep in sync.
+  assert.ok(!fs.existsSync(path.join(ROOT, "codex", "hooks")), "keep one hooks file: hooks/hooks.json");
   const hooks = readJson("hooks/hooks.json").hooks;
   const codexEvents = new Set(["SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse", "PermissionRequest",
     "PreCompact", "PostCompact", "SubagentStart", "SubagentStop", "Stop", "SessionEnd"]);
