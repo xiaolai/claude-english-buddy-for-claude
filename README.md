@@ -86,6 +86,8 @@ Two install paths — both reach the same code. Pick one:
 | `/claude-english-buddy:mistakes` | All-time recurring mistakes — your blind spots |
 | `/claude-english-buddy:config` | Configure language, strictness, domain terms |
 | `/claude-english-buddy:review` | Deep review of any text (docs, PRs, emails) |
+| `/claude-english-buddy:preview` | Dry-run review of a prompt before you submit it; logs nothing |
+| `/claude-english-buddy:drill` | Spot-quiz on your top recurring mistakes |
 
 ## Daily Report
 
@@ -197,7 +199,7 @@ The goal is not perfection. The goal is **visible progress** — seeing your err
 ## Tests
 
 ```bash
-npm test    # 22 tests covering detection, state, and stats
+npm test    # detection, state, stats, annotations, and the hook's wire format
 ```
 
 ## License

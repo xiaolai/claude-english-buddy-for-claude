@@ -5,7 +5,7 @@ English language coach for non-native speakers using Claude Code. Auto-corrects 
 ## Prerequisites
 
 - Node.js >= 18
-- Run `npm install` after cloning the plugin to install dependencies before running tests or hooks.
+- No npm dependencies; `npm test` runs the Node.js native test runner directly.
 
 ## Project structure
 
