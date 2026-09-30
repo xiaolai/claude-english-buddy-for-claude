@@ -2,6 +2,8 @@
 
 English language coach for non-native speakers. The Codex layout ships the same coaching hook as the Claude Code plugin plus 17 skills under `codex/skills/`, all prefixed `claude-english-buddy-`.
 
+The manifest sets `"commands": []`. Without it, Codex converts the Claude `commands/*.md` (including the `commands/shared/` partials) into extra skills that duplicate `codex/skills/`.
+
 This tree is hand-built. Do not regenerate it with `build-codex.mjs --force`: the converter would bring back `$ARGUMENTS` placeholders, `${CLAUDE_PLUGIN_ROOT}` paths, and Claude tool names. `tests/codex-layout.test.mjs` fails if any of those reappear.
 
 ## Hooks

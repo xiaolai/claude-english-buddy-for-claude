@@ -67,6 +67,10 @@ test("Codex manifest points at the skills tree and matches the Claude version", 
   assert.equal(codex.version, claude.version);
   assert.equal(listing.version, claude.version);
   assert.equal(codex.skills, "./codex/skills/");
+  // Codex turns a plugin's commands/*.md into extra skills unless the manifest
+  // sets commands to []; those would duplicate codex/skills/ and expose the
+  // commands/shared/ partials as skills.
+  assert.deepEqual(codex.commands, []);
   assert.ok(codex.interface.defaultPrompt.length <= 3);
   for (const p of codex.interface.defaultPrompt) assert.ok(p.length <= 128, `defaultPrompt over 128 chars: ${p}`);
 });

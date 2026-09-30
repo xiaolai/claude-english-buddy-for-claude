@@ -17,6 +17,7 @@
     "non-native"
   ],
   "skills": "./codex/skills/",
+  "commands": [],
   "interface": {
     "displayName": "English Buddy",
     "shortDescription": "English coach for non-native speakers: corrects, translates, or refines each prompt and tracks your progress",
