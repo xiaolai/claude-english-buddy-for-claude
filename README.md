@@ -220,3 +220,17 @@ npm test    # detection, state, stats, annotations, the hook's wire format, hist
 ## License
 
 ISC
+
+## Coaching latency and provider routing
+
+`.claude-english-buddy.json` and the global coaching config also accept `coaching_mode` (`automatic`
+or `on-demand`), `sample_rate` (0 to 1, default 1), and `timeout_seconds` (1 to 30, default 5).
+On-demand mode coaches only explicit `::` prompts; review commands remain available. Sampling is
+deterministic by prompt. `coaching-metrics.jsonl` records elapsed milliseconds and failures without
+prompt text. Coaching context is supplementary; the original user message remains authoritative.
+
+The direct adapter honors `ANTHROPIC_BASE_URL`, or the explicit `CLAUDE_ENGLISH_BUDDY_BASE_URL`,
+and `CLAUDE_ENGLISH_BUDDY_MODEL`. It supports the Anthropic messages protocol, not arbitrary
+OpenAI-compatible servers. Bedrock retains its separate adapter. Vertex/Foundry sessions require
+an explicit coaching endpoint; they never silently send prompts to Anthropic. Configure credentials
+for the selected endpoint. Credentials and prompts are passed to curl through stdin rather than argv.

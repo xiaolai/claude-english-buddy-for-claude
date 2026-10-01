@@ -16,6 +16,9 @@ import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import process from "node:process";
+import { coachingPolicy, preservesLiterals } from "./lib/coaching-policy.mjs";
+let policy;
+let timing;
 
 import { detectMode } from "./lib/detect.mjs";
 import { logCorrection, logClean, resolveConfig } from "./lib/state.mjs";
@@ -31,6 +34,7 @@ function readStdin() {
 
 // Pending user-visible warning (auth failure). Drained on next emit().
 let authWarning = null;
+let hadFailure = false;
 
 // Callers pass { additionalContext, systemMessage } or { decision, reason }.
 // Context must travel as hookSpecificOutput.additionalContext: Claude Code and
@@ -39,9 +43,10 @@ let authWarning = null;
 function emit({ additionalContext, ...rest }) {
   const obj = { ...rest };
   if (additionalContext) {
-    obj.hookSpecificOutput = { hookEventName: "UserPromptSubmit", additionalContext };
+    obj.hookSpecificOutput = { hookEventName: "UserPromptSubmit", additionalContext: "Coaching is supplementary. The original user prompt is authoritative; preserve literal code, names, constraints and intent.\n" + additionalContext };
   }
   if (authWarning) {
+    hadFailure = true;
     obj.systemMessage = obj.systemMessage ? `${authWarning}\n${obj.systemMessage}` : authWarning;
     authWarning = null;
   }
@@ -71,7 +76,7 @@ function getCredentials() {
   const result = spawnSync("security", [
     "find-generic-password", "-s", "Claude Code-credentials", "-w",
   ], { encoding: "utf8", timeout: 5_000 });
-  if (result.error || result.status !== 0) return null;
+  if (result.error || result.status !== 0) { authWarning = "[claude-english-buddy] Coaching request failed or timed out; original prompt is unchanged."; return null; }
 
   try {
     const creds = JSON.parse(result.stdout.trim());
@@ -96,7 +101,7 @@ function callHaiku(systemPrompt, userText) {
 function callHaikuAnthropic(systemPrompt, userText) {
   // Note: claude CLI deadlocks when spawned inside hooks, so we call the API directly via curl.
   const creds = getCredentials();
-  if (!creds) return null;
+  if (!creds) { authWarning = "[claude-english-buddy] Coaching unavailable: no credentials. Original prompt is unchanged."; return null; }
 
   if (creds.expired) {
     authWarning = "[claude-english-buddy] OAuth token expired. Restart Claude Code to refresh the keychain.";
@@ -109,27 +114,30 @@ function callHaikuAnthropic(systemPrompt, userText) {
     : `x-api-key: ${creds.token}`;
 
   const body = JSON.stringify({
-    model: "claude-haiku-4-5-20251001",
+    model: policy.model,
     max_tokens: 1024,
     system: systemPrompt,
     messages: [{ role: "user", content: userText }],
   });
 
   // Synchronous HTTP via curl — can't use claude CLI (deadlocks inside hooks)
-  const result = spawnSync("curl", [
-    "-s", "--max-time", "30",
-    "https://api.anthropic.com/v1/messages",
-    "-H", "content-type: application/json",
-    "-H", authHeader,
-    "-H", "anthropic-version: 2023-06-01",
-    "-d", body,
-  ], { encoding: "utf8", timeout: 35_000 });
+  // Credentials and prompt go through stdin, never process arguments.
+  const curlConfig = [
+    `url = ${JSON.stringify(policy.url)}`,
+    `header = ${JSON.stringify('content-type: application/json')}`,
+    `header = ${JSON.stringify(authHeader)}`,
+    `header = ${JSON.stringify('anthropic-version: 2023-06-01')}`,
+    `data = ${JSON.stringify(body)}`,
+  ].join('\n');
+  const result = spawnSync("curl", ["-s", "--max-time", String(policy.timeout), "--config", "-"],
+    { input: curlConfig, encoding: "utf8", timeout: (policy.timeout + 1) * 1000 });
 
-  if (result.error || result.status !== 0) return null;
+  if (result.error || result.status !== 0) { authWarning = "[claude-english-buddy] Coaching request failed or timed out; original prompt is unchanged."; return null; }
 
   try {
     const response = JSON.parse(result.stdout);
     if (response.error) {
+      authWarning = "[claude-english-buddy] Coaching service returned an error; original prompt is unchanged.";
       if (response.error.type === "authentication_error") {
         authWarning = "[claude-english-buddy] Authentication failed. If you authenticate via `claude setup-token`, restart Claude Code to refresh the OAuth token.";
       }
@@ -165,7 +173,7 @@ function callHaikuBedrock(systemPrompt, userText) {
   const outFile = path.join(os.tmpdir(), `${suffix}-out.json`);
 
   try {
-    fs.writeFileSync(inFile, body, "utf8");
+    fs.writeFileSync(inFile, body, { encoding: "utf8", mode: 0o600 });
 
     const result = spawnSync("aws", [
       "bedrock-runtime", "invoke-model",
@@ -175,9 +183,9 @@ function callHaikuBedrock(systemPrompt, userText) {
       "--content-type", "application/json",
       "--accept", "application/json",
       outFile,
-    ], { encoding: "utf8", timeout: 35_000 });
+    ], { encoding: "utf8", timeout: (policy.timeout + 1) * 1000 });
 
-    if (result.error || result.status !== 0) return null;
+    if (result.error || result.status !== 0) { authWarning = "[claude-english-buddy] Coaching request failed or timed out; original prompt is unchanged."; return null; }
 
     const response = JSON.parse(fs.readFileSync(outFile, "utf8"));
     if (response.error) return null;
@@ -247,12 +255,17 @@ function main() {
   const cwd = input.cwd || process.cwd();
   const session = input.session_id || null;
   const config = resolveConfig(cwd);
+  policy = coachingPolicy(config, prompt);
+  timing = { started: Date.now(), session };
 
   // Build summary instruction
   let summaryCtx = "";
   if (config.summary_language) {
     summaryCtx = `After your response, add a brief summary in ${config.summary_language} under a --- separator. Summarize the key points, actions taken, and decisions made. Keep it concise (2-5 sentences). Label it: **${config.summary_language} Summary**`;
   }
+
+  if (!policy.enabled) { if (summaryCtx) emit({ additionalContext: summaryCtx }); return; }
+  if (policy.error) { authWarning = "[claude-english-buddy] " + policy.error; emitFallback(summaryCtx); return; }
 
   // Detect mode
   const detection = detectMode(prompt);
@@ -274,9 +287,10 @@ function main() {
       return;
     }
 
+    if (!preservesLiterals(detection.text, result)) { authWarning = "[claude-english-buddy] Refinement changed a literal; original prompt retained."; emitFallback(summaryCtx); return; }
     logCorrection({ mode: "refine", session, original: detection.text, corrected: result });
 
-    let ctx = `IMPORTANT: The user used :: to request prompt refinement. Their refined intent is: ${result}. Follow this refined prompt as the user's actual request.`;
+    let ctx = `The user requested prompt refinement. Suggested wording: ${result}. Preserve the original request's constraints whenever wording differs.`;
     if (summaryCtx) ctx += " " + summaryCtx;
     emit({ additionalContext: ctx, systemMessage: `Refined: ${result}` });
     return;
@@ -298,6 +312,7 @@ function main() {
     const translated = lines[0] || result;
     const sourceLang = lines[1] || "";
 
+    if (!preservesLiterals(detection.text, translated)) { authWarning = "[claude-english-buddy] Translation changed a literal; original prompt retained."; emitFallback(summaryCtx); return; }
     logCorrection({ mode: "translate", session, original: detection.text, corrected: translated, annotations: sourceLang });
 
     let ctx = `Translated prompt: ${translated}`;
@@ -327,6 +342,7 @@ function main() {
 
   const rawLines = result.split("\n");
   const corrected = (rawLines[0] || result).trim();
+  if (!preservesLiterals(detection.text, corrected)) { authWarning = "[claude-english-buddy] Correction changed a literal; original prompt retained."; emitFallback(summaryCtx); return; }
   const annotationBlock = rawLines.slice(1).join("\n").trim();
 
   // Parse Haiku's output through the shared parser so we get defensive
@@ -360,3 +376,10 @@ function main() {
 }
 
 main();
+
+if (timing && process.env.CLAUDE_PLUGIN_DATA) {
+  try {
+    fs.mkdirSync(process.env.CLAUDE_PLUGIN_DATA, { recursive: true });
+    fs.appendFileSync(path.join(process.env.CLAUDE_PLUGIN_DATA, 'coaching-metrics.jsonl'), JSON.stringify({ ts: new Date().toISOString(), elapsed_ms: Date.now() - timing.started, enabled: policy.enabled, timeout_seconds: policy.timeout, failure: Boolean(hadFailure || authWarning || policy.error) }) + '\n');
+  } catch { /* telemetry cannot block the prompt */ }
+}

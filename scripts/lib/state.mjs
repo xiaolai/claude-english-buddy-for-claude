@@ -151,6 +151,9 @@ export function resolveConfig(cwd) {
   const global = loadGlobalConfig();
   const project = loadProjectConfig(cwd);
   return {
+    coaching_mode: project.coaching_mode ?? global.coaching_mode ?? "automatic",
+    sample_rate: project.sample_rate ?? global.sample_rate ?? 1,
+    timeout_seconds: project.timeout_seconds ?? global.timeout_seconds ?? 5,
     auto_correct: project.auto_correct ?? global.auto_correct ?? true,
     summary_language: project.summary_language ?? global.summary_language ?? null,
     strictness: project.strictness ?? global.strictness ?? "standard",

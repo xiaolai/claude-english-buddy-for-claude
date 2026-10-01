@@ -78,3 +78,5 @@ node -e '
 ```
 
 If the command exits non-zero, show its error line verbatim and STOP without showing the config. Otherwise show the updated merged config (Step 2).
+
+Supported coaching controls: `coaching_mode=on-demand|automatic`, `sample_rate` (0–1), and `timeout_seconds` (1–30, default 5). On-demand mode runs only explicit `::` requests. Preserve these settings when saving config.

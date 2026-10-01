@@ -100,3 +100,5 @@ Context: User wants to raise the strictness level for their next session.
 user: "/claude-english-buddy:config --set strictness=strict"
 assistant: "Updating .claude-english-buddy.json with strictness=strict and showing the updated merged config."
 </example>
+
+Additional supported settings: `coaching_mode=on-demand` runs coaching only for explicit `::` requests; `coaching_mode=automatic` retains automatic coaching. `sample_rate` is a number from 0 to 1 for automatic mode; `timeout_seconds` is 1–30 (default 5). Preserve these fields when writing config. Endpoint/model overrides are `CLAUDE_ENGLISH_BUDDY_BASE_URL` and `CLAUDE_ENGLISH_BUDDY_MODEL`.
