@@ -1,5 +1,5 @@
 ---
-description: "Shared: unified config load across claude-english-buddy commands"
+description: "Shared: unified config load across english-buddy commands"
 user-invocable: false
 disable-model-invocation: true
 ---
@@ -11,11 +11,11 @@ disable-model-invocation: true
 
 ## Config Resolution
 
-All claude-english-buddy commands share the same three-layer config resolution.
+All english-buddy commands share the same three-layer config resolution.
 
 ### Priority (highest to lowest)
 
-1. **Project config** — `.claude-english-buddy.json` in the current working directory
+1. **Project config** — `.english-buddy.json` in the current working directory (`.claude-english-buddy.json`, the name before 0.8.0, is read when the new file is absent)
 2. **Global config** — `~/.claude/hooks/prompt_coach.json`
 3. **Defaults** — hard-coded inside `scripts/lib/state.mjs`
 
@@ -51,4 +51,4 @@ The output is a plain JSON object with the four keys above plus any project-spec
 
 ### Writing Config
 
-Commands that update config should only ever write to the project file (`.claude-english-buddy.json` in cwd). Do not write to the global file from a command — that is the user's responsibility. The `/config --set key=value` command implements this.
+Commands that update config should only ever write to the project file (`.english-buddy.json` in cwd). Do not write to the global file from a command — that is the user's responsibility. The `/config --set key=value` command implements this.

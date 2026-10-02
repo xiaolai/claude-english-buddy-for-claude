@@ -84,11 +84,11 @@ If the script fails (module not found, node error, etc.), read the JSONL files d
 
 <example>
 Context: User wants a quick summary of the corrections made during today's session.
-user: "/claude-english-buddy:today"
+user: "/english-buddy:today"
 assistant: "Loading today's correction history and comparing against yesterday and the 7-day average."
 </example>
 <example>
 Context: User typed the today report but wants a window wider than today.
-user: "/claude-english-buddy:today last 3 days"
-assistant: "/claude-english-buddy:today covers today only, compared with yesterday and the 7-day average. For a 3-day window I'll run /claude-english-buddy:stats --days 3."
+user: "/english-buddy:today last 3 days"
+assistant: "/english-buddy:today covers today only, compared with yesterday and the 7-day average. For a 3-day window I'll run /english-buddy:stats --days 3."
 </example>

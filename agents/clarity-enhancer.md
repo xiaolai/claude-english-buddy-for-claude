@@ -14,7 +14,7 @@ model: sonnet
 color: cyan
 tools: Read
 skills:
-  - claude-english-buddy:technical-writing
+  - english-buddy:technical-writing
 ---
 
 ## Your Mission

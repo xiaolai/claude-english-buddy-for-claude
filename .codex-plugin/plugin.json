@@ -1,12 +1,12 @@
 {
-  "name": "claude-english-buddy",
-  "version": "0.7.0",
+  "name": "english-buddy",
+  "version": "0.8.0",
   "description": "English language coach for non-native speakers \u2014 auto-corrects prompts, translates non-English, refines with :: prefix, tracks improvement over time",
   "author": {
     "name": "xiaolai"
   },
-  "homepage": "https://github.com/xiaolai/claude-english-buddy-for-claude",
-  "repository": "https://github.com/xiaolai/claude-english-buddy-for-claude",
+  "homepage": "https://github.com/xiaolai/english-buddy-for-claude",
+  "repository": "https://github.com/xiaolai/english-buddy-for-claude",
   "license": "ISC",
   "keywords": [
     "english",
@@ -29,12 +29,12 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Show me today's English report with $claude-english-buddy-today.",
-      "Review this commit message with $claude-english-buddy-review.",
-      "Drill me on my recurring English mistakes with $claude-english-buddy-drill."
+      "Show me today's English report with $english-buddy-today.",
+      "Review this commit message with $english-buddy-review.",
+      "Drill me on my recurring English mistakes with $english-buddy-drill."
     ],
-    "websiteURL": "https://github.com/xiaolai/claude-english-buddy-for-claude",
-    "privacyPolicyURL": "https://github.com/xiaolai/claude-english-buddy-for-claude/blob/main/PRIVACY.md",
+    "websiteURL": "https://github.com/xiaolai/english-buddy-for-claude",
+    "privacyPolicyURL": "https://github.com/xiaolai/english-buddy-for-claude/blob/main/PRIVACY.md",
     "screenshots": []
   }
 }

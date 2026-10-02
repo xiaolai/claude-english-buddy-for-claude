@@ -1,5 +1,5 @@
 {
   "enabledPlugins": {
-    "claude-english-buddy@xiaolai": true
+    "english-buddy@xiaolai": true
   }
 }

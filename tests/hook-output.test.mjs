@@ -24,7 +24,7 @@ function runHook(input, projectConfig) {
     fs.mkdirSync(home);
     fs.mkdirSync(cwd);
     if (projectConfig) {
-      fs.writeFileSync(path.join(cwd, ".claude-english-buddy.json"), JSON.stringify(projectConfig));
+      fs.writeFileSync(path.join(cwd, ".english-buddy.json"), JSON.stringify(projectConfig));
     }
     // An empty HOME keeps the user's global config out of the test, and an
     // empty credential environment guarantees no network call.

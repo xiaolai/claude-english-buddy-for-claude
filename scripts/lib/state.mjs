@@ -6,11 +6,29 @@ import path from "node:path";
 import os from "node:os";
 
 const PLUGIN_DATA_ENV = "CLAUDE_PLUGIN_DATA";
-const FALLBACK_DIR = path.join(os.tmpdir(), "claude-english-buddy");
-const CONFIG_NAME = ".claude-english-buddy.json";
+const FALLBACK_DIR = path.join(os.tmpdir(), "english-buddy");
+const CONFIG_NAME = ".english-buddy.json";
+// Until 0.8.0 the plugin was named claude-english-buddy; its config file and
+// data folder carried that name, and are still read.
+const LEGACY_NAME = "claude-english-buddy";
+const LEGACY_CONFIG_NAME = `.${LEGACY_NAME}.json`;
+
+// The history kept under the old plugin name, copied once into the new data folder.
+function migrateLegacyHistory(pluginData) {
+  const target = path.join(pluginData, "history");
+  if (fs.existsSync(target)) return;
+  const legacy = path.join(path.dirname(pluginData), path.basename(pluginData).replace(/^english-buddy-/, `${LEGACY_NAME}-`), "history");
+  if (legacy === target || !fs.existsSync(legacy)) return;
+  try {
+    fs.cpSync(legacy, target, { recursive: true, errorOnExist: false, force: false });
+  } catch {
+    // A failed copy leaves the old history where it was; new corrections start a new history.
+  }
+}
 
 function getDataDir() {
   const pluginData = process.env[PLUGIN_DATA_ENV];
+  if (pluginData) migrateLegacyHistory(pluginData);
   return pluginData
     ? path.join(pluginData, "history")
     : path.join(FALLBACK_DIR, "history");
@@ -128,7 +146,9 @@ export function listHistoryDates() {
 // --- Project config ---
 
 export function loadProjectConfig(cwd) {
-  const configPath = path.join(cwd || process.cwd(), CONFIG_NAME);
+  const dir = cwd || process.cwd();
+  const current = path.join(dir, CONFIG_NAME);
+  const configPath = fs.existsSync(current) ? current : path.join(dir, LEGACY_CONFIG_NAME);
   if (!fs.existsSync(configPath)) return {};
   try {
     return JSON.parse(fs.readFileSync(configPath, "utf8"));

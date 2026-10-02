@@ -78,11 +78,11 @@ Use the writing-reviewer's output verbatim, but prepend a preview banner and app
 
 <example>
 Context: User is about to submit a high-stakes prompt and wants to see corrections first.
-user: "/claude-english-buddy:preview refactor the autentication modul, its got too many responsibilties"
+user: "/english-buddy:preview refactor the autentication modul, its got too many responsibilties"
 assistant: "I'll run a preview review and show you what would be corrected before you submit."
 </example>
 <example>
 Context: User drafted a commit message and wants a dry-run of the hook's corrections.
-user: "/claude-english-buddy:preview Fixed parser bug, updated tests also"
+user: "/english-buddy:preview Fixed parser bug, updated tests also"
 assistant: "Previewing the text through the same correction pipeline the hook uses."
 </example>

@@ -6,6 +6,7 @@ tmp/
 *~
 .env
 .env.*
+.english-buddy.json
 .claude-english-buddy.json
 
 evals/results/

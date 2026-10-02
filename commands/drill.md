@@ -35,7 +35,7 @@ node -e "
 
 If the script fails, read JSONL files directly via `Glob` + `Read` following the fallback pattern in `${CLAUDE_PLUGIN_ROOT}/commands/shared/jsonl-parser.md`.
 
-If the user has fewer than 5 corrections total across all time, respond: "Not enough history yet to drill. Use Claude Code for a few days first, then try `/claude-english-buddy:drill` again." and STOP.
+If the user has fewer than 5 corrections total across all time, respond: "Not enough history yet to drill. Use Claude Code for a few days first, then try `/english-buddy:drill` again." and STOP.
 
 ### Step 3: Identify top-3 categories
 
@@ -116,11 +116,11 @@ After N rounds, emit a summary:
 
 <example>
 Context: User has 30+ days of correction history and wants active practice on their blind spots.
-user: "/claude-english-buddy:drill"
+user: "/english-buddy:drill"
 assistant: "Loading your top-3 recurring mistake categories and generating a drill sentence."
 </example>
 <example>
 Context: User wants to focus a drill on just one category.
-user: "/claude-english-buddy:drill --category article"
+user: "/english-buddy:drill --category article"
 assistant: "Running a drill round focused on article errors from your history."
 </example>

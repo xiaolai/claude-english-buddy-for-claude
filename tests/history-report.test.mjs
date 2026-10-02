@@ -38,7 +38,7 @@ const RECORDS = [
 
 test("--host codex reads the Codex plugin data dir and ignores an inherited CLAUDE_PLUGIN_DATA", () => {
   withDir((dir) => {
-    const codexData = path.join(dir, "codex", "plugins", "data", "claude-english-buddy-xiaolai");
+    const codexData = path.join(dir, "codex", "plugins", "data", "english-buddy-xiaolai");
     writeHistory(codexData, RECORDS);
     const decoy = path.join(dir, "decoy");
     writeHistory(decoy, [{ mode: "clean" }]);

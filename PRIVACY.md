@@ -1,8 +1,8 @@
-# Privacy Policy — claude-english-buddy
+# Privacy Policy — english-buddy
 
 _Last updated: 2026-05-20_
 
-claude-english-buddy is a Claude Code and Codex CLI plugin that auto-corrects English mistakes in your prompts via a `UserPromptSubmit` hook. **This plugin transmits prompt text to a Large Language Model API. Read carefully.**
+english-buddy is a Claude Code and Codex CLI plugin that auto-corrects English mistakes in your prompts via a `UserPromptSubmit` hook. **This plugin transmits prompt text to a Large Language Model API. Read carefully.**
 
 ## What is sent externally
 
@@ -17,10 +17,10 @@ Anthropic's privacy policy applies to data sent through the Anthropic API. AWS's
 
 ## What is stored locally
 
-- `$CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl` (under Codex: `~/.codex/plugins/data/claude-english-buddy-<marketplace>/history/`) — a JSON-lines file containing each prompt, its correction, and metadata (timestamp, session id, correction category). Stored on your local filesystem only; **never transmitted**.
-- Configuration in `~/.claude/hooks/prompt_coach.json` (global) or `.claude-english-buddy.json` (project).
+- `$CLAUDE_PLUGIN_DATA/history/YYYY-MM-DD.jsonl` (under Codex: `~/.codex/plugins/data/english-buddy-<marketplace>/history/`) — a JSON-lines file containing each prompt, its correction, and metadata (timestamp, session id, correction category). Stored on your local filesystem only; **never transmitted**.
+- Configuration in `~/.claude/hooks/prompt_coach.json` (global) or `.english-buddy.json` (project).
 
-The local history powers `/claude-english-buddy:today`, `/claude-english-buddy:stats`, `/claude-english-buddy:mistakes`, and `/claude-english-buddy:drill` — all of which read from your local filesystem only.
+The local history powers `/english-buddy:today`, `/english-buddy:stats`, `/english-buddy:mistakes`, and `/english-buddy:drill` — all of which read from your local filesystem only.
 
 ## What is not collected
 
@@ -28,10 +28,10 @@ The plugin maintainer (xiaolai) does **not** see, log, store, or aggregate any u
 
 ## How to disable
 
-- **Disable auto-correction** while keeping the plugin installed: set `auto_correct: false` in `.claude-english-buddy.json`, or run `/claude-english-buddy:config --set auto_correct=false`. The hook continues to run but skips API calls, except for prompts you explicitly start with `::` to request refinement.
-- **Use the dry-run mode**: `/claude-english-buddy:preview <text>` reviews text without submitting a prompt or persisting anything.
+- **Disable auto-correction** while keeping the plugin installed: set `auto_correct: false` in `.english-buddy.json`, or run `/english-buddy:config --set auto_correct=false`. The hook continues to run but skips API calls, except for prompts you explicitly start with `::` to request refinement.
+- **Use the dry-run mode**: `/english-buddy:preview <text>` reviews text without submitting a prompt or persisting anything.
 - **Remove local correction history**: delete `$CLAUDE_PLUGIN_DATA/history/`.
-- **Uninstall completely**: `claude plugin uninstall claude-english-buddy@xiaolai`, or under Codex `codex plugin remove claude-english-buddy@xiaolai`.
+- **Uninstall completely**: `claude plugin uninstall english-buddy@xiaolai`, or under Codex `codex plugin remove english-buddy@xiaolai`.
 
 ## Third parties
 

@@ -10,7 +10,7 @@ import assert from "node:assert/strict";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS = path.join(ROOT, "codex", "skills");
-const PREFIX = "claude-english-buddy-";
+const PREFIX = "english-buddy-";
 const readJson = (rel) => JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8"));
 
 const skills = fs
@@ -39,7 +39,7 @@ test("no Claude-only constructs in Codex skills", () => {
     [/\$\{?CLAUDE_PLUGIN_DATA/, "CLAUDE_PLUGIN_DATA is unset (or foreign) in Codex skill commands"],
     [/\$ARGUMENTS/, "Codex skills get no argument substitution"],
     [/AskUserQuestion|\bTask tool\b|`Task`|\bGlob\b/, "Claude Code tool name"],
-    [/\/claude-english-buddy:/, "Claude Code slash command"],
+    [/\/english-buddy:/, "Claude Code slash command"],
     [/model: |haiku|sonnet/i, "Claude model pin"],
   ];
   for (const { dir, text } of skills) {
@@ -50,7 +50,7 @@ test("no Claude-only constructs in Codex skills", () => {
 test("every $skill reference resolves and every $ROOT script exists", () => {
   const names = new Set(skills.map((s) => s.dir));
   for (const { dir, text } of skills) {
-    for (const [, ref] of text.matchAll(/\$(claude-english-buddy-[a-z-]*[a-z])/g)) {
+    for (const [, ref] of text.matchAll(/\$(english-buddy-[a-z-]*[a-z])/g)) {
       assert.ok(names.has(ref), `${dir}: dangling reference $${ref}`);
     }
     for (const [, rel] of text.matchAll(/\$ROOT\/([\w./-]+)/g)) {

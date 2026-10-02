@@ -76,6 +76,6 @@ test("detectMode returns skip for slash commands", () => {
 });
 
 test("shouldSkip returns true for a Codex skill invocation", () => {
-  assert.equal(shouldSkip("$claude-english-buddy-review fix the typos in README"), true);
-  assert.equal(detectMode("$claude-english-buddy-today").mode, "skip");
+  assert.equal(shouldSkip("$english-buddy-review fix the typos in README"), true);
+  assert.equal(detectMode("$english-buddy-today").mode, "skip");
 });

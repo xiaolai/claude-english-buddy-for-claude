@@ -14,9 +14,9 @@ model: haiku
 color: yellow
 tools: Read
 skills:
-  - claude-english-buddy:grammar-fundamentals
-  - claude-english-buddy:punctuation-rules
-  - claude-english-buddy:common-non-native-mistakes
+  - english-buddy:grammar-fundamentals
+  - english-buddy:punctuation-rules
+  - english-buddy:common-non-native-mistakes
 ---
 
 ## Your Mission

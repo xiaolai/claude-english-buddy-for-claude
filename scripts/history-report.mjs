@@ -9,7 +9,7 @@
 // Data directory, in priority order:
 //   --data-dir <dir>  explicit.
 //   --host codex      the directory Codex gives this plugin's hooks as
-//                     PLUGIN_DATA: $CODEX_HOME/plugins/data/claude-english-buddy-<marketplace>.
+//                     PLUGIN_DATA: $CODEX_HOME/plugins/data/english-buddy-<marketplace>.
 //                     An inherited CLAUDE_PLUGIN_DATA is ignored: Codex does not set
 //                     it for skill commands, so any value there belongs to another process.
 //   (neither)         $CLAUDE_PLUGIN_DATA, as Claude Code sets it.
@@ -21,7 +21,7 @@ import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 
-const PLUGIN = "claude-english-buddy";
+const PLUGIN = "english-buddy";
 
 function fail(code, message) {
   process.stderr.write(`history-report: ${message}\n`);
@@ -60,7 +60,8 @@ function findCodexDataDir(codexHome) {
   if (!fs.existsSync(base)) return null;
   const candidates = fs
     .readdirSync(base, { withFileTypes: true })
-    .filter((e) => e.isDirectory() && e.name.startsWith(`${PLUGIN}-`))
+    // The old name's folder still counts: the plugin was claude-english-buddy until 0.8.0.
+    .filter((e) => e.isDirectory() && (e.name.startsWith(`${PLUGIN}-`) || e.name.startsWith(`claude-${PLUGIN}-`)))
     .map((e) => path.join(base, e.name))
     .sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs);
   return candidates[0] || null;

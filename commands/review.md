@@ -70,11 +70,11 @@ Analyze the text for:
 
 <example>
 Context: User pastes a draft PR description inline and wants a deep review before posting.
-user: "/claude-english-buddy:review This PR fix the parser bug and add tests for edge case"
+user: "/english-buddy:review This PR fix the parser bug and add tests for edge case"
 assistant: "Reviewing the inline text for grammar, clarity, tone, structure, and technical accuracy."
 </example>
 <example>
 Context: User wants to review a longer document saved as a file.
-user: "/claude-english-buddy:review docs/release-notes.md"
+user: "/english-buddy:review docs/release-notes.md"
 assistant: "Reading docs/release-notes.md and producing a full review with corrected version, changes table, and summary."
 </example>

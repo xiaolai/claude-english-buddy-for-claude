@@ -71,11 +71,11 @@ State the verdict in one sentence with the delta, e.g. "Improving — error rate
 
 <example>
 Context: User wants the default 30-day view of their language stats.
-user: "/claude-english-buddy:stats"
+user: "/english-buddy:stats"
 assistant: "Computing the last 30 days of prompts, corrections, weekly trend, and top recurring mistakes."
 </example>
 <example>
 Context: User wants a tighter 7-day window to see recent progress.
-user: "/claude-english-buddy:stats --days 7"
+user: "/english-buddy:stats --days 7"
 assistant: "Generating a 7-day stats report with weekly trend and top patterns."
 </example>

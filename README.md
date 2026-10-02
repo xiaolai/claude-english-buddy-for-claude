@@ -1,8 +1,10 @@
-# claude-english-buddy
+# english-buddy
 
-[![Validated by NLPM](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/xiaolai/claude-english-buddy-for-claude/main/nlpm-badge.json)](https://github.com/xiaolai/claude-english-buddy-for-claude/blob/main/nlpm-badge.json)
+[![Validated by NLPM](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/xiaolai/english-buddy-for-claude/main/nlpm-badge.json)](https://github.com/xiaolai/english-buddy-for-claude/blob/main/nlpm-badge.json)
 
 English language coach for non-native speakers who use Claude Code or Codex CLI daily.
+
+> **Renamed in 0.8.0.** This plugin was `claude-english-buddy`; Claude Code reserves names beginning with `claude-`. Claude Code moves an existing install to `english-buddy@xiaolai` by itself, and commands are now `/english-buddy:…`. A project's `.claude-english-buddy.json` is still read, and your correction history is copied over on first use.
 
 ## The Problem
 
@@ -14,7 +16,7 @@ You're not getting worse at English. You're losing the signal that would make yo
 
 ## The Solution
 
-claude-english-buddy restores the feedback loop. It sits between you and Claude, silently correcting your prompts and showing you what was wrong — every time, automatically, with zero friction.
+english-buddy restores the feedback loop. It sits between you and Claude, silently correcting your prompts and showing you what was wrong — every time, automatically, with zero friction.
 
 ```
 You type:    "refactor the autentication modul, its got too many responsibilties"
@@ -65,14 +67,14 @@ Two install paths — both reach the same code. Pick one:
 
 ```bash
 /plugin marketplace add anthropics/claude-plugins-community
-/plugin install claude-english-buddy@claude-community
+/plugin install english-buddy@claude-community
 ```
 
 **Via the xiaolai marketplace** (latest version lands here first):
 
 ```bash
 /plugin marketplace add xiaolai/claude-plugin-marketplace
-/plugin install claude-english-buddy@xiaolai
+/plugin install english-buddy@xiaolai
 ```
 
 > **Install fails with "Plugin not found in marketplace 'xiaolai'"?** Your local marketplace clone is stale. Run `claude plugin marketplace update xiaolai` and retry — `plugin install` does not auto-refresh. (The community marketplace doesn't have this caveat — Anthropic's CI keeps it current.)
@@ -81,12 +83,12 @@ Two install paths — both reach the same code. Pick one:
 
 ```bash
 codex plugin marketplace add xiaolai/claude-plugin-marketplace
-codex plugin add claude-english-buddy@xiaolai
+codex plugin add english-buddy@xiaolai
 ```
 
 Then start `codex` and run `/hooks` to trust the plugin's hooks; Codex does not run plugin hooks until you do. The skills work without that step, but nothing is corrected or recorded.
 
-Codex uses skills instead of slash commands: `$claude-english-buddy-today`, `$claude-english-buddy-stats`, `$claude-english-buddy-mistakes`, `$claude-english-buddy-drill`, `$claude-english-buddy-config`, `$claude-english-buddy-review`, and `$claude-english-buddy-preview`, or describe what you want and Codex picks the skill. Differences from Claude Code:
+Codex uses skills instead of slash commands: `$english-buddy-today`, `$english-buddy-stats`, `$english-buddy-mistakes`, `$english-buddy-drill`, `$english-buddy-config`, `$english-buddy-review`, and `$english-buddy-preview`, or describe what you want and Codex picks the skill. Differences from Claude Code:
 
 - The hook calls Claude Haiku with your own Anthropic credentials (`ANTHROPIC_API_KEY`, `CLAUDE_CODE_OAUTH_TOKEN`, or a signed-in Claude Code on macOS). Without them, only the review skills work.
 - History is kept per host: prompts typed in Codex are reported by the Codex skills, and prompts typed in Claude Code by the Claude commands. Configuration is shared.
@@ -96,17 +98,17 @@ Codex uses skills instead of slash commands: `$claude-english-buddy-today`, `$cl
 
 | Command | Description |
 |---------|-------------|
-| `/claude-english-buddy:today` | Today's correction report — mistakes, patterns, lessons, trend |
-| `/claude-english-buddy:stats` | Long-term trends — error rate over weeks, improvement trajectory |
-| `/claude-english-buddy:mistakes` | All-time recurring mistakes — your blind spots |
-| `/claude-english-buddy:config` | Configure language, strictness, domain terms |
-| `/claude-english-buddy:review` | Deep review of any text (docs, PRs, emails) |
-| `/claude-english-buddy:preview` | Dry-run review of a prompt before you submit it; logs nothing |
-| `/claude-english-buddy:drill` | Spot-quiz on your top recurring mistakes |
+| `/english-buddy:today` | Today's correction report — mistakes, patterns, lessons, trend |
+| `/english-buddy:stats` | Long-term trends — error rate over weeks, improvement trajectory |
+| `/english-buddy:mistakes` | All-time recurring mistakes — your blind spots |
+| `/english-buddy:config` | Configure language, strictness, domain terms |
+| `/english-buddy:review` | Deep review of any text (docs, PRs, emails) |
+| `/english-buddy:preview` | Dry-run review of a prompt before you submit it; logs nothing |
+| `/english-buddy:drill` | Spot-quiz on your top recurring mistakes |
 
 ## Daily Report
 
-The most powerful feature. Run `/claude-english-buddy:today` at the end of your day:
+The most powerful feature. Run `/english-buddy:today` at the end of your day:
 
 ```markdown
 # Today's Language Report — 2026-04-01
@@ -141,7 +143,7 @@ You're improving. Error rate down 37% in 3 weeks.
 
 ## Configuration
 
-### Project config (`.claude-english-buddy.json`)
+### Project config (`.english-buddy.json`)
 
 ```json
 {
@@ -223,7 +225,7 @@ ISC
 
 ## Coaching latency and provider routing
 
-`.claude-english-buddy.json` and the global coaching config also accept `coaching_mode` (`automatic`
+`.english-buddy.json` and the global coaching config also accept `coaching_mode` (`automatic`
 or `on-demand`), `sample_rate` (0 to 1, default 1), and `timeout_seconds` (1 to 30, default 5).
 On-demand mode coaches only explicit `::` prompts; review commands remain available. Sampling is
 deterministic by prompt. `coaching-metrics.jsonl` records elapsed milliseconds and failures without

@@ -14,7 +14,7 @@ model: sonnet
 color: blue
 tools: Read
 skills:
-  - claude-english-buddy:tone-calibration
+  - english-buddy:tone-calibration
 ---
 
 ## Your Mission

@@ -1,4 +1,4 @@
-# claude-english-buddy
+# english-buddy
 
 English language coach for non-native speakers using Claude Code or Codex CLI. Auto-corrects prompts via UserPromptSubmit hook, tracks corrections, generates daily reports.
 
@@ -30,7 +30,7 @@ agents/
   tone-calibrator.md    Tone and register subagent
   clarity-enhancer.md   Clarity and phrasing subagent
 skills/
-  claude-english-buddy/
+  english-buddy/
     writing-guide/              SKILL.md — meta-router to focused skills
     grammar-fundamentals/       Grammar rules reference
     punctuation-rules/          Punctuation rules reference
@@ -64,7 +64,7 @@ tests/
   plugin.json           Codex manifest (skills: ./codex/skills/)
 codex/
   AGENTS.md             Codex layout notes: paths, hooks, differences from Claude Code
-  skills/               17 hand-built Codex skills, prefixed claude-english-buddy-
+  skills/               17 hand-built Codex skills, prefixed english-buddy-
 package.json            Node.js project config
 ```
 
@@ -96,7 +96,7 @@ Clean prompts logged as `{"mode":"clean"}` for accurate rate calculation.
 
 ### Config resolution
 
-Priority: project (`.claude-english-buddy.json`) > global (`~/.claude/hooks/prompt_coach.json`) > defaults.
+Priority: project (`.english-buddy.json`) > global (`~/.claude/hooks/prompt_coach.json`) > defaults.
 
 ### Testing
 

@@ -11,7 +11,7 @@ model: sonnet
 color: green
 tools: Read, Task
 skills:
-  - claude-english-buddy:writing-guide
+  - english-buddy:writing-guide
 ---
 
 ## Your Mission
